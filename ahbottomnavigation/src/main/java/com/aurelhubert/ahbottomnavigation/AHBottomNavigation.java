@@ -407,8 +407,8 @@ public class AHBottomNavigation extends FrameLayout {
 			FrameLayout container = view.findViewById(R.id.bottom_navigation_container);
 			ImageView icon = view.findViewById(R.id.bottom_navigation_item_icon);
 			AHTextView title = view.findViewById(R.id.bottom_navigation_item_title);
-            AHTextView notification = view.findViewById(R.id.bottom_navigation_notification);
-
+			AHTextView notification = view.findViewById(R.id.bottom_navigation_notification);
+			
             icon.getLayoutParams().width = getIconWidth(itemIndex);
             icon.getLayoutParams().height = getIconHeight(itemIndex);
 
@@ -476,7 +476,10 @@ public class AHBottomNavigation extends FrameLayout {
 				title.setTextColor(titleDisableColor.get(i));
 			}
 
-            if (item.getTag() != null) view.setTag(item.getTag());
+            if (item.getTag() != null) {
+				final String tag = (String)item.getTag();
+				view.setTag(tag);
+			}
 
             LayoutParams params = new LayoutParams((int) itemWidth, (int) height);
 			linearLayout.addView(view, params);
@@ -555,9 +558,9 @@ public class AHBottomNavigation extends FrameLayout {
 			View view = inflater.inflate(R.layout.bottom_navigation_small_item, this, false);
 			ImageView icon = view.findViewById(R.id.bottom_navigation_small_item_icon);
             AHTextView title = view.findViewById(R.id.bottom_navigation_small_item_title);
-            AHTextView notification = view.findViewById(R.id.bottom_navigation_notification);
-			icon.setImageDrawable(item.getDrawable(context));
+			AHTextView notification = view.findViewById(R.id.bottom_navigation_notification);
 
+			icon.setImageDrawable(item.getDrawable(context));
             icon.getLayoutParams().width = getIconWidth(itemIndex);
             icon.getLayoutParams().height = getIconHeight(itemIndex);
 
@@ -646,7 +649,10 @@ public class AHBottomNavigation extends FrameLayout {
 				width = (int) (itemWidth * 1.16);
 			}
 
-            if (item.getTag() != null) view.setTag(item.getTag());
+            if (item.getTag() != null) {
+				final String tag = (String)item.getTag();
+				view.setTag(tag);
+			}
 
 			LayoutParams params = new LayoutParams(width, (int) height);
 			linearLayout.addView(view, params);
@@ -658,15 +664,12 @@ public class AHBottomNavigation extends FrameLayout {
 	}
 
     private void setTabAccessibilityLabel(int itemIndex, int currentItem) {
-        AHBottomNavigationItem item = items.get(itemIndex);
-        String contentDescription = currentItem == itemIndex ? "selected, " : "";
-        if (item.getTitle(context) != null) contentDescription += (item.getTitle(context) + ", ");
-        if (AHHelper.isInteger(notifications.get(itemIndex).getReadableText())) {
-            int num = Integer.parseInt(notifications.get(itemIndex).getReadableText());
-            contentDescription += (num + " new item" + (num == 1 ? "" : "s") + ", ");
-        }
-        contentDescription += "tab, " + (itemIndex + 1) + " out of " + getItemsCount();
-        views.get(itemIndex).setContentDescription(contentDescription);
+		AHBottomNavigationItem item = items.get(itemIndex);
+		String tag = item.getTag();
+
+		if (tag != null) {
+			views.get(itemIndex).setContentDescription(tag);
+		}
     }
 
 	/**
